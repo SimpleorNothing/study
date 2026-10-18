@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>다시풀기 · 오답 변형문제</title>
+  <meta name="description" content="푼 문제를 사진으로 올리면 틀린 문제마다 변형문제 5개와 정답·해설을 PDF로 만들어 드립니다." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23fbf8f1'/%3E%3Cpath d='M18 34l9 9 19-22' fill='none' stroke='%23d8452b' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/vendor/katex/katex.min.css" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M8 17l5 5 11-12" /></svg>
+        </span>
+        <span class="brand-name">다시풀기</span>
+      </a>
+      <ol class="steps" aria-label="진행 단계">
+        <li data-step="upload" class="on"><b>1</b><span>올리기</span></li>
+        <li data-step="review"><b>2</b><span>오답 확인</span></li>
+        <li data-step="result"><b>3</b><span>PDF 받기</span></li>
+      </ol>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="banner" class="banner" hidden></div>
+
+    <!-- STEP 1 -->
+    <section id="step-upload" class="step">
+      <div class="hero">
+        <h1>틀린 문제, <em>다음엔 맞히게.</em></h1>
+        <p>채점한 문제지를 찍어 올리면 틀린 문제마다 <strong>변형문제 5개</strong>를 만들어<br class="br-wide" />
+          문제지와 정답·해설이 담긴 <strong>PDF 한 파일</strong>로 드려요.</p>
+      </div>
+
+      <div class="card form">
+        <div class="field">
+          <label class="label">과목</label>
+          <div class="chips" id="subjects" role="radiogroup">
+            <button type="button" class="chip on" data-v="수학">수학</button>
+            <button type="button" class="chip" data-v="영어">영어</button>
+            <button type="button" class="chip" data-v="국어">국어</button>
+            <button type="button" class="chip" data-v="과학">과학</button>
+            <button type="button" class="chip" data-v="사회">사회</button>
+            <button type="button" class="chip" data-v="기타">기타</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label class="label" for="grade">학년</label>
+            <select id="grade">
+              <optgroup label="초등">
+                <option>초1</option><option>초2</option><option>초3</option>
+                <option>초4</option><option>초5</option><option>초6</option>
+              </optgroup>
+              <optgroup label="중등">
+                <option selected>중1</option><option>중2</option><option>중3</option>
+              </optgroup>
+              <optgroup label="고등">
+                <option>고1</option><option>고2</option><option>고3</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label" for="name">이름 <small>(선택 · PDF에만 표시)</small></label>
+            <input id="name" type="text" maxlength="20" placeholder="예) 민준" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">푼 문제지</label>
+          <label id="drop" class="drop" for="file">
+            <input id="file" type="file" accept="image/*,application/pdf" multiple hidden />
+            <span class="drop-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><path d="M24 31V11m0 0l-8 8m8-8l8 8M10 30v5a4 4 0 004 4h20a4 4 0 004-4v-5" /></svg>
+            </span>
+            <span class="drop-title">사진이나 PDF를 끌어다 놓거나 눌러서 선택</span>
+            <span class="drop-sub">여러 장 가능 · 채점 표시(○ / ✓ / 빗금)가 보이면 더 정확해요</span>
+          </label>
+          <ul id="thumbs" class="thumbs"></ul>
+        </div>
+
+        <div class="field">
+          <label class="label" for="note">채점 메모 <small>(선택)</small></label>
+          <textarea id="note" rows="2" maxlength="1000" placeholder="예) 3, 7, 12번 틀림 · 7번 정답은 ④&#10;채점을 안 했다면 비워 두세요. AI가 직접 풀어서 채점해요."></textarea>
+        </div>
+
+        <div class="actions">
+          <button id="btn-analyze" class="btn primary" type="button" disabled>틀린 문제 찾기</button>
+          <button id="btn-demo" class="btn ghost" type="button">예시로 먼저 보기</button>
+        </div>
+        <p id="last-run" class="last-run" hidden>
+          <button type="button" class="link" id="btn-last">지난번 만든 PDF 다시 받기</button>
+        </p>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section id="step-review" class="step" hidden>
+      <div class="section-head">
+        <div>
+          <h2>틀린 문제를 확인해 주세요</h2>
+          <p id="review-summary" class="muted"></p>
+        </div>
+      </div>
+      <p id="overall-note" class="note-box" hidden></p>
+      <div class="toolbar">
+        <button type="button" class="link" id="sel-wrong">오답만 선택</button>
+        <span class="dot">·</span>
+        <button type="button" class="link" id="sel-none">모두 해제</button>
+        <span class="muted small">AI 판정이 틀렸다면 체크를 직접 고쳐 주세요.</span>
+      </div>
+      <ul id="problem-list" class="plist"></ul>
+      <div class="actions sticky">
+        <button id="btn-back" class="btn ghost" type="button">← 다시 올리기</button>
+        <button id="btn-generate" class="btn primary" type="button" disabled>변형문제 만들기</button>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section id="step-result" class="step" hidden>
+      <div class="section-head">
+        <div>
+          <h2 id="result-title">변형문제를 만들고 있어요</h2>
+          <p id="result-sub" class="muted">문항마다 쌍둥이 2 · 개념 확인 · 실수 정조준 · 한 단계 응용 순서로 만들어요.</p>
+        </div>
+      </div>
+      <ul id="progress" class="progress"></ul>
+      <div id="result-actions" class="actions" hidden>
+        <button id="btn-download" class="btn primary" type="button">PDF 다운로드</button>
+        <button id="btn-print" class="btn ghost" type="button">인쇄</button>
+        <button id="btn-restart" class="btn ghost" type="button">처음으로</button>
+      </div>
+      <div id="preview" class="preview"></div>
+    </section>
+  </main>
+
+  <footer class="foot wrap">
+    <span>study.simpleornothing.com</span>
+    <span class="muted">올린 사진은 저장하지 않아요 · AI가 만든 문제는 한 번 훑어보고 쓰세요</span>
+  </footer>
+
+  <!-- 접속 코드 -->
+  <dialog id="code-dialog" class="dialog">
+    <form method="dialog" id="code-form">
+      <h3>접속 코드</h3>
+      <p class="muted">가족만 쓰도록 잠가 두었어요. 코드를 한 번 입력하면 이 기기에서 기억해요.</p>
+      <input id="code-input" type="password" autocomplete="current-password" required />
+      <p id="code-error" class="error" hidden></p>
+      <div class="actions"><button class="btn primary" value="ok">확인</button></div>
+    </form>
+  </dialog>
+
+  <div id="busy" class="busy" hidden>
+    <div class="busy-card">
+      <div class="spinner" aria-hidden="true"></div>
+      <p id="busy-text">채점하는 중…</p>
+      <p class="muted small" id="busy-sub">사진 장수에 따라 30초~1분 정도 걸려요</p>
+    </div>
+  </div>
+
+  <div id="render-root" aria-hidden="true"></div>
+
+  <script src="/vendor/katex/katex.min.js"></script>
+  <script src="/vendor/katex/contrib/auto-render.min.js"></script>
+  <script src="/vendor/html2canvas.min.js"></script>
+  <script src="/vendor/jspdf.umd.min.js"></script>
+  <script src="/demo.js"></script>
+  <script src="/pdf.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

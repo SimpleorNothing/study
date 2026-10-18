@@ -1,0 +1,17 @@
+{
+  "name": "study",
+  "version": "1.0.0",
+  "description": "오답 변형문제 생성기 — study.simpleornothing.com",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "vendor": "node scripts/vendor.mjs"
+  },
+  "private": true,
+  "devDependencies": {
+    "wrangler": "^4.151.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
+    "katex": "^0.16.11"
+  }
+}
